@@ -18,21 +18,15 @@ jobs:
 
       - name: Install system dependencies
         run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
-
-      - name: Install R packages
-        uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          packages: |
-            any::eurostat
-            any::dplyr
-            any::tidyr
-            any::readr
-            any::lubridate
-            
-            - name: Run R scripts
-            run: |
-            Rscript scripts/update_hicp.R
-            Rscript scripts/update_debt.R
+        
+        - name: Install R packages
+        run: |
+        
+        Rscript -e 'install.packages(c("eurostat","dplyr","tidyr","readr","lubridate"), repos="https://cloud.r-project.org")'
+    - name: Run R scripts
+  run: |
+    Rscript scripts/update_hicp.R
+    Rscript scripts/update_debt.R
     
       - name: Commit and push if changed
         run: |

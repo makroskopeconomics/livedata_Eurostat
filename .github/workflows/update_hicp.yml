@@ -1,4 +1,4 @@
-name: Eurostat Auto Update
+name: Update Eurostat CSVs (HICP + Debt)
 
 on:
   schedule:
@@ -18,20 +18,20 @@ jobs:
 
       - name: Install system dependencies
         run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
-        
-        - name: Install R packages
+
+      - name: Install R packages
         run: |
-        
-        Rscript -e 'install.packages(c("eurostat","dplyr","tidyr","readr","lubridate"), repos="https://cloud.r-project.org")'
-    - name: Run R scripts
-  run: |
-    Rscript scripts/update_hicp.R
-    Rscript scripts/update_debt.R
-    
+          Rscript -e 'install.packages(c("eurostat","dplyr","tidyr","readr","lubridate"), repos="https://cloud.r-project.org")'
+
+      - name: Run R scripts
+        run: |
+          Rscript scripts/update_hicp.R
+          Rscript scripts/update_debt.R
+
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add git add *.csv
-          git diff --staged --quiet || git commit -m "Auto-update HICP inflation CSV"
+          git add -A
+          git diff --staged --quiet || git commit -m "Auto-update Eurostat CSVs"
           git push

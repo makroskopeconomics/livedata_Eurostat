@@ -21,7 +21,12 @@ jobs:
 
       - name: Install R packages
         run: |
-          Rscript -e "install.packages(c('eurostat','dplyr','tidyr','readr'), repos='https://cloud.r-project.org')"
+          options(repos = c(CRAN = "https://cloud.r-project.org"))
+          install.packages("eurostat")
+          install.packages("dplyr")
+          install.packages("tidyr")
+          install.packages("readr")
+        shell: Rscript {0}
 
       - name: Run trade script
         run: Rscript scripts/update_trade.R
